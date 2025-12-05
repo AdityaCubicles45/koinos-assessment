@@ -22,92 +22,138 @@ const getImageUrl = (itemName, category) => {
 const cardStyles = {
   card: {
     borderRadius: '12px',
-    border: '1px solid #e5e7eb',
-    backgroundColor: '#ffffff',
-    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.2s ease-in-out',
+    backgroundColor: '#1a1a1a',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    transition: 'all 0.3s ease-in-out',
     cursor: 'pointer',
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     textDecoration: 'none',
     color: 'inherit',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    position: 'relative'
   },
   cardHover: {
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    transform: 'translateY(-2px)'
+    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    transform: 'translateY(-4px)'
   },
   imageContainer: {
     width: '100%',
-    height: '200px',
+    height: '240px',
     overflow: 'hidden',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#2a2a2a',
     position: 'relative'
   },
   image: {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    transition: 'transform 0.3s ease-in-out'
+    transition: 'transform 0.5s ease-in-out'
   },
   imageLoading: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#2a2a2a',
     color: '#9ca3af',
-    fontSize: '14px'
+    fontSize: '14px',
+    height: '100%'
   },
   imageError: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#2a2a2a',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     color: '#9ca3af',
-    fontSize: '12px'
+    fontSize: '12px',
+    height: '100%'
   },
-  header: {
-    padding: '16px 20px 12px'
+  contentSection: {
+    padding: '20px',
+    backgroundColor: '#1a1a1a',
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px'
+  },
+  headerRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: '12px'
   },
   title: {
-    fontSize: '18px',
-    fontWeight: '600',
-    color: '#111827',
+    fontSize: '22px',
+    fontWeight: '700',
+    color: '#ffffff',
     margin: 0,
-    marginBottom: '8px',
-    lineHeight: '1.4'
-  },
-  category: {
-    fontSize: '14px',
-    color: '#6b7280',
-    fontWeight: '500',
-    textTransform: 'uppercase',
-    letterSpacing: '0.5px'
-  },
-  content: {
-    padding: '0 20px',
+    lineHeight: '1.3',
     flex: 1
+  },
+  topRatedTag: {
+    backgroundColor: '#2a2a2a',
+    color: '#ffffff',
+    fontSize: '11px',
+    fontWeight: '600',
+    padding: '4px 10px',
+    borderRadius: '12px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.5px',
+    whiteSpace: 'nowrap'
+  },
+  metaInfo: {
+    fontSize: '14px',
+    color: '#9ca3af',
+    fontWeight: '400',
+    marginTop: '4px'
+  },
+  description: {
+    fontSize: '15px',
+    color: '#d1d5db',
+    lineHeight: '1.5',
+    marginTop: '8px',
+    flex: 1
+  },
+  footerRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 'auto',
+    paddingTop: '16px'
   },
   priceContainer: {
     display: 'flex',
-    alignItems: 'baseline',
-    gap: '4px'
+    flexDirection: 'column',
+    gap: '2px'
   },
   price: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#007bff'
+    color: '#ffffff',
+    lineHeight: '1'
   },
   priceLabel: {
     fontSize: '14px',
-    color: '#6b7280',
+    color: '#9ca3af',
     fontWeight: '400'
   },
-  footer: {
-    padding: '16px 20px 20px',
-    borderTop: '1px solid #f3f4f6',
-    marginTop: 'auto'
+  bookButton: {
+    backgroundColor: '#4a4a4a',
+    color: '#ffffff',
+    fontSize: '14px',
+    fontWeight: '600',
+    padding: '10px 20px',
+    borderRadius: '8px',
+    border: 'none',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    transition: 'background-color 0.2s ease-in-out'
+  },
+  bookButtonHover: {
+    backgroundColor: '#5a5a5a'
   }
 };
 
@@ -117,15 +163,28 @@ function ItemCard({ item }) {
   const [imageError, setImageError] = React.useState(false);
   const imageUrl = React.useMemo(() => getImageUrl(item.name, item.category), [item.name, item.category]);
 
+  const handleClick = (e) => {
+    e.preventDefault();
+    window.location.href = `/items/${item.id}`;
+  };
+
   return (
-    <Link
-      to={`/items/${item.id}`}
+    <div
       style={{
         ...cardStyles.card,
         ...(isHovered ? cardStyles.cardHover : {})
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick(e);
+        }
+      }}
       aria-label={`View details for ${item.name}`}
     >
       <div style={cardStyles.imageContainer}>
@@ -142,7 +201,7 @@ function ItemCard({ item }) {
             alt={item.name}
             style={{
               ...cardStyles.image,
-              ...(isHovered ? { transform: 'scale(1.05)' } : {}),
+              ...(isHovered ? { transform: 'scale(1.1)' } : {}),
               display: imageLoaded ? 'block' : 'none'
             }}
             onLoad={() => setImageLoaded(true)}
@@ -154,31 +213,41 @@ function ItemCard({ item }) {
           />
         )}
       </div>
-      <div style={cardStyles.header}>
-        <h3 style={cardStyles.title}>{item.name}</h3>
-        <div style={cardStyles.category}>{item.category || 'Uncategorized'}</div>
-      </div>
-      <div style={cardStyles.content}>
-        <div style={cardStyles.priceContainer}>
-          <span style={cardStyles.price}>
-            ${item.price?.toLocaleString('en-US', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-            }) || '0.00'}
-          </span>
+      <div style={cardStyles.contentSection}>
+        <div style={cardStyles.headerRow}>
+          <h3 style={cardStyles.title}>{item.name}</h3>
+          <span style={cardStyles.topRatedTag}>Top rated</span>
+        </div>
+        <div style={cardStyles.metaInfo}>
+          {item.category || 'Product'} • Premium quality
+        </div>
+        <div style={cardStyles.description}>
+          {item.description || `High-quality ${item.name.toLowerCase()} with excellent features and performance.`}
+        </div>
+        <div style={cardStyles.footerRow}>
+          <div style={cardStyles.priceContainer}>
+            <span style={cardStyles.price}>
+              ${item.price?.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }) || '0.00'}
+            </span>
+            <span style={cardStyles.priceLabel}>/ unit</span>
+          </div>
+          <button
+            style={{
+              ...cardStyles.bookButton,
+              ...(isHovered ? cardStyles.bookButtonHover : {})
+            }}
+            onClick={handleClick}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            View Details
+            <span style={{ fontSize: '16px' }}>→</span>
+          </button>
         </div>
       </div>
-      <div style={cardStyles.footer}>
-        <span style={{
-          fontSize: '12px',
-          color: '#9ca3af',
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px'
-        }}>
-          View Details →
-        </span>
-      </div>
-    </Link>
+    </div>
   );
 }
 
