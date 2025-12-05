@@ -122,17 +122,22 @@ function Items() {
     const loadItems = async () => {
       try {
         const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
-        if (isMounted) {
-          setItems(data.items);
+        if (isMounted && data) {
+          setItems(data.items || []);
           setPagination({
-            total: data.total,
-            totalPages: data.totalPages,
-            items: data.items
+            total: data.total || 0,
+            totalPages: data.totalPages || 0,
+            items: data.items || []
           });
         }
       } catch (err) {
         if (err.name !== 'AbortError' && isMounted) {
           console.error('Failed to fetch items:', err);
+          setPagination({
+            total: 0,
+            totalPages: 0,
+            items: []
+          });
         }
       }
     };
@@ -153,7 +158,8 @@ function Items() {
   };
 
   const Row = ({ index, style }) => {
-    const item = pagination.items[index];
+    const items = pagination?.items || [];
+    const item = items[index];
     if (!item) return null;
     return (
       <div style={{ ...style, ...styles.row }}>
@@ -167,6 +173,9 @@ function Items() {
       </div>
     );
   };
+
+  const items = pagination?.items || [];
+  const itemsLength = items.length;
 
   return (
     <div style={styles.container}>
@@ -190,17 +199,17 @@ function Items() {
           <span>Loading items...</span>
         </div>
       )}
-      {!loading && pagination.items.length === 0 && (
+      {!loading && itemsLength === 0 && (
         <div style={styles.emptyState}>
           <p>No items found{searchQuery && ` matching "${searchQuery}"`}</p>
         </div>
       )}
-      {!loading && pagination.items.length > 0 && (
+      {!loading && itemsLength > 0 && (
         <>
           <div style={styles.listContainer}>
             <FixedSizeList
               height={500}
-              itemCount={pagination.items.length}
+              itemCount={itemsLength}
               itemSize={50}
               width="100%"
               role="list"
