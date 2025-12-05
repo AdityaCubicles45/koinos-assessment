@@ -4,11 +4,27 @@ import Items from './Items';
 import ItemDetail from './ItemDetail';
 import { DataProvider } from '../state/DataContext';
 
+const navStyles = {
+  nav: {
+    padding: '16px 24px',
+    borderBottom: '1px solid #e0e0e0',
+    backgroundColor: '#fff',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+  },
+  link: {
+    textDecoration: 'none',
+    color: '#1a1a1a',
+    fontSize: '18px',
+    fontWeight: '600',
+    transition: 'color 0.2s'
+  }
+};
+
 function App() {
   return (
     <DataProvider>
-      <nav style={{padding: 16, borderBottom: '1px solid #ddd'}}>
-        <Link to="/">Items</Link>
+      <nav style={navStyles.nav}>
+        <Link to="/" style={navStyles.link}>Items</Link>
       </nav>
       <Routes>
         <Route path="/" element={<Items />} />
