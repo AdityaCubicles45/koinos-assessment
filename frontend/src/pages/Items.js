@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FixedSizeList } from 'react-window';
 import { useData } from '../state/DataContext';
-import { Link } from 'react-router-dom';
+import ItemCard from '../components/ui/item-card';
 
 const styles = {
   container: {
@@ -44,30 +43,11 @@ const styles = {
     animation: 'loading 1.5s infinite',
     borderRadius: '4px'
   },
-  listContainer: {
-    border: '1px solid #e0e0e0',
-    borderRadius: '8px',
-    height: '500px',
-    overflow: 'hidden',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-  },
-  row: {
-    padding: '12px 16px',
-    borderBottom: '1px solid #f0f0f0',
-    transition: 'background-color 0.2s'
-  },
-  rowHover: {
-    backgroundColor: '#f8f9fa'
-  },
-  link: {
-    textDecoration: 'none',
-    color: '#007bff',
-    fontSize: '16px',
-    fontWeight: '500',
-    transition: 'color 0.2s'
-  },
-  linkHover: {
-    color: '#0056b3'
+  gridContainer: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+    gap: '24px',
+    marginBottom: '24px'
   },
   pagination: {
     marginTop: '24px',
@@ -168,23 +148,6 @@ function Items() {
     setPage(1);
   };
 
-  const Row = ({ index, style }) => {
-    const items = pagination?.items || [];
-    const item = items[index];
-    if (!item) return null;
-    return (
-      <div style={{ ...style, ...styles.row }}>
-        <Link 
-          to={`/items/${item.id}`}
-          style={styles.link}
-          aria-label={`View details for ${item.name}`}
-        >
-          {item.name}
-        </Link>
-      </div>
-    );
-  };
-
   const items = pagination?.items || [];
   const itemsLength = items.length;
 
@@ -217,16 +180,10 @@ function Items() {
       )}
       {!loading && itemsLength > 0 && (
         <>
-          <div style={styles.listContainer}>
-            <FixedSizeList
-              height={500}
-              itemCount={itemsLength}
-              itemSize={50}
-              width="100%"
-              role="list"
-            >
-              {Row}
-            </FixedSizeList>
+          <div style={styles.gridContainer} role="list">
+            {items.map((item) => (
+              <ItemCard key={item.id} item={item} />
+            ))}
           </div>
           <div style={styles.pagination}>
             <button
