@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ProductDetail from '../components/ui/product-detail';
+import API_BASE_URL from '../config';
 
 const loadingStyles = {
   container: {
@@ -28,7 +29,7 @@ function ItemDetail() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:3001/api/items/${id}`)
+    fetch(`${API_BASE_URL}/api/items/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Item not found');
         return res.json();

@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from 'react';
+import API_BASE_URL from '../config';
 
 const DataContext = createContext();
 
@@ -16,7 +17,7 @@ export function DataProvider({ children }) {
       if (params.limit) queryParams.append('limit', params.limit);
       if (params.q) queryParams.append('q', params.q);
       
-      const res = await fetch(`http://localhost:3001/api/items?${queryParams}`);
+      const res = await fetch(`${API_BASE_URL}/api/items?${queryParams}`);
       if (!res.ok) throw new Error('Failed to fetch items');
       const json = await res.json();
       return json;
