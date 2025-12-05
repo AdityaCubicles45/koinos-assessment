@@ -21,9 +21,10 @@ const getImageUrl = (itemName, category) => {
 
 const cardStyles = {
   card: {
-    borderRadius: '12px',
-    backgroundColor: '#1a1a1a',
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    borderRadius: '16px',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
     transition: 'all 0.3s ease-in-out',
     cursor: 'pointer',
     height: '100%',
@@ -35,14 +36,15 @@ const cardStyles = {
     position: 'relative'
   },
   cardHover: {
-    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    transform: 'translateY(-4px)'
+    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+    transform: 'translateY(-4px)',
+    borderColor: '#d1d5db'
   },
   imageContainer: {
     width: '100%',
     height: '240px',
     overflow: 'hidden',
-    backgroundColor: '#2a2a2a',
+    backgroundColor: '#f9fafb',
     position: 'relative'
   },
   image: {
@@ -55,23 +57,23 @@ const cardStyles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2a2a2a',
-    color: '#9ca3af',
+    backgroundColor: '#f9fafb',
+    color: '#6b7280',
     fontSize: '14px',
     height: '100%'
   },
   imageError: {
-    backgroundColor: '#2a2a2a',
+    backgroundColor: '#f9fafb',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: '#9ca3af',
+    color: '#6b7280',
     fontSize: '12px',
     height: '100%'
   },
   contentSection: {
     padding: '20px',
-    backgroundColor: '#1a1a1a',
+    backgroundColor: '#ffffff',
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
@@ -84,16 +86,16 @@ const cardStyles = {
     gap: '12px'
   },
   title: {
-    fontSize: '22px',
+    fontSize: '20px',
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#111827',
     margin: 0,
     lineHeight: '1.3',
     flex: 1
   },
   topRatedTag: {
-    backgroundColor: '#2a2a2a',
-    color: '#ffffff',
+    backgroundColor: '#fef3c7',
+    color: '#92400e',
     fontSize: '11px',
     fontWeight: '600',
     padding: '4px 10px',
@@ -104,13 +106,13 @@ const cardStyles = {
   },
   metaInfo: {
     fontSize: '14px',
-    color: '#9ca3af',
+    color: '#6b7280',
     fontWeight: '400',
     marginTop: '4px'
   },
   description: {
     fontSize: '15px',
-    color: '#d1d5db',
+    color: '#4b5563',
     lineHeight: '1.5',
     marginTop: '8px',
     flex: 1
@@ -120,7 +122,8 @@ const cardStyles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 'auto',
-    paddingTop: '16px'
+    paddingTop: '16px',
+    borderTop: '1px solid #f3f4f6'
   },
   priceContainer: {
     display: 'flex',
@@ -130,16 +133,16 @@ const cardStyles = {
   price: {
     fontSize: '24px',
     fontWeight: '700',
-    color: '#ffffff',
+    color: '#007bff',
     lineHeight: '1'
   },
   priceLabel: {
     fontSize: '14px',
-    color: '#9ca3af',
+    color: '#6b7280',
     fontWeight: '400'
   },
   bookButton: {
-    backgroundColor: '#4a4a4a',
+    backgroundColor: '#007bff',
     color: '#ffffff',
     fontSize: '14px',
     fontWeight: '600',
@@ -153,7 +156,7 @@ const cardStyles = {
     transition: 'background-color 0.2s ease-in-out'
   },
   bookButtonHover: {
-    backgroundColor: '#5a5a5a'
+    backgroundColor: '#0056b3'
   }
 };
 
