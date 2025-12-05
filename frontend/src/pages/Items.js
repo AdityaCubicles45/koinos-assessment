@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
+import { FixedSizeList } from 'react-window';
 import { useData } from '../state/DataContext';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ function Items() {
 
     const loadItems = async () => {
       try {
-        const data = await fetchItems({ page, limit: 20, q: searchQuery || undefined });
+        const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
         if (isMounted) {
           setItems(data.items);
           setPagination({
@@ -46,6 +47,23 @@ function Items() {
     setPage(1);
   };
 
+  const Row = ({ index, style }) => {
+    const item = pagination.items[index];
+    if (!item) return null;
+    return (
+      <div style={style}>
+        <div style={{ padding: '10px', borderBottom: '1px solid #eee' }}>
+          <Link 
+            to={`/items/${item.id}`}
+            style={{ textDecoration: 'none', color: '#007bff', fontSize: '16px' }}
+          >
+            {item.name}
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       <h1>Items</h1>
@@ -68,23 +86,22 @@ function Items() {
       {!loading && pagination.items.length === 0 && <p>No items found</p>}
       {!loading && pagination.items.length > 0 && (
         <>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
-            {pagination.items.map(item => (
-              <li key={item.id} style={{ marginBottom: '10px' }}>
-                <Link 
-                  to={`/items/${item.id}`}
-                  style={{ textDecoration: 'none', color: '#007bff' }}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div style={{ border: '1px solid #ddd', borderRadius: '4px', height: '500px' }}>
+            <FixedSizeList
+              height={500}
+              itemCount={pagination.items.length}
+              itemSize={50}
+              width="100%"
+            >
+              {Row}
+            </FixedSizeList>
+          </div>
           <div style={{ marginTop: '20px', display: 'flex', gap: '10px', alignItems: 'center' }}>
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              style={{ padding: '8px 16px' }}
+              style={{ padding: '8px 16px', cursor: page === 1 ? 'not-allowed' : 'pointer' }}
+              aria-label="Previous page"
             >
               Previous
             </button>
@@ -92,7 +109,8 @@ function Items() {
             <button
               onClick={() => setPage(p => Math.min(pagination.totalPages, p + 1))}
               disabled={page >= pagination.totalPages}
-              style={{ padding: '8px 16px' }}
+              style={{ padding: '8px 16px', cursor: page >= pagination.totalPages ? 'not-allowed' : 'pointer' }}
+              aria-label="Next page"
             >
               Next
             </button>
