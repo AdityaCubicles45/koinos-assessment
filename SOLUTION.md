@@ -56,12 +56,7 @@
 ### 4. UI/UX Polish
 **Approach:** Card-based layout with images, modern styling, loading states, and accessibility features.
 
-**UI Screenshot - Items Listing Page:**
-The items listing page displays a grid of product cards with:
-- Search bar at the top
-- Product cards showing: product image, "TOP RATED" badge, title, category, description, price, and "View Details" button
-- Pagination controls at the bottom
-- Clean white cards with hover effects
+![Items Listing Page](frontend/public/1.png)
 
 **Trade-offs:**
 - ✅ Better visual hierarchy
@@ -71,15 +66,7 @@ The items listing page displays a grid of product cards with:
 ### 5. Product Detail Page
 **Approach:** E-commerce-style detail page with image gallery, features, and specifications.
 
-**UI Screenshot - Product Detail Page:**
-The product detail page features:
-- Two-column layout: large product image with thumbnails on left, product info on right
-- Product information: "TOP RATED" badge, title, category, star rating (4.8), price
-- Description section with detailed product information
-- Key features list with checkmarks
-- "Add to Cart" and "Buy Now" action buttons
-- Specifications table (Category, SKU, Availability, Brand)
-- Back navigation link
+![Product Detail Page](frontend/public/2.png)
 
 **Trade-offs:**
 - ✅ Professional appearance
