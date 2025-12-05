@@ -117,51 +117,56 @@ function Items() {
   const debounceTimerRef = useRef(null);
 
   useEffect(() => {
-    abortControllerRef.current = new AbortController();
-    let isMounted = true;
-
-    const loadItems = async () => {
-      try {
-        const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
-        if (isMounted && data) {
-          setItems(data.items || []);
-          setPagination({
-            total: data.total || 0,
-            totalPages: data.totalPages || 0,
-            items: data.items || []
-          });
-        }
-      } catch (err) {
-        if (err.name !== 'AbortError' && isMounted) {
-          console.error('Failed to fetch items:', err);
-          setPagination({
-            total: 0,
-            totalPages: 0,
-            items: []
-          });
-        }
-      }
-    };
-
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
 
-    if (searchQuery !== '') {
-      debounceTimerRef.current = setTimeout(() => {
-        loadItems();
-      }, 300);
-    } else {
-      loadItems();
-    }
-
-    return () => {
-      isMounted = false;
+    debounceTimerRef.current = setTimeout(() => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
+      abortControllerRef.current = new AbortController();
+      let isMounted = true;
+
+      const loadItems = async () => {
+        try {
+          const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
+          if (isMounted && data) {
+            setItems(data.items || []);
+            setPagination({
+              total: data.total || 0,
+              totalPages: data.totalPages || 0,
+              items: data.items || []
+            });
+          }
+        } catch (err) {
+          if (err.name !== 'AbortError' && isMounted) {
+            console.error('Failed to fetch items:', err);
+            setPagination({
+              total: 0,
+              totalPages: 0,
+              items: []
+            });
+          }
+        }
+      };
+
+      loadItems();
+
+      return () => {
+        isMounted = false;
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
+      };
+    }, searchQuery ? 300 : 0);
+
+    return () => {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
+      }
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
       }
     };
   }, [page, searchQuery, fetchItems, setItems]);
