@@ -1,7 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const imageMap = {
+  'Laptop Pro': 'https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Computers%20Peripherals/Laptop/Images/310938_0_sgvggv.png?tr=w-1000',
+  'Noise Cancelling Headphones': 'https://media-ik.croma.com/prod/https://media.tatacroma.com/Croma%20Assets/Entertainment/Headphones%20and%20Earphones/Images/319022_0_miv5zDLbY.png?updatedAt=1763650200629?tr=w-1000',
+  'Ultra‑Wide Monitor': 'https://m.media-amazon.com/images/I/41Fgc-hw+hL._SX300_SY300_QL70_FMwebp_.jpg',
+  'Ergonomic Chair': 'https://m.media-amazon.com/images/I/71VGJKSnDiL._SX679_.jpg',
+  'Standing Desk': 'https://m.media-amazon.com/images/I/41Uz0WSy2gL._SY300_SX300_QL70_FMwebp_.jpg'
+};
+
 const getImageUrl = (itemName, category) => {
+  if (imageMap[itemName]) {
+    return imageMap[itemName];
+  }
   const searchTerm = itemName.toLowerCase().replace(/\s+/g, '+');
   const categoryTerm = category ? category.toLowerCase() : '';
   const keyword = searchTerm || categoryTerm || 'product';
