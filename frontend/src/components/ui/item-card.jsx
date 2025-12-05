@@ -45,7 +45,8 @@ const cardStyles = {
     height: '240px',
     overflow: 'hidden',
     backgroundColor: '#f9fafb',
-    position: 'relative'
+    position: 'relative',
+    flexShrink: 0
   },
   image: {
     width: '100%',
@@ -77,7 +78,8 @@ const cardStyles = {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px'
+    gap: '12px',
+    minHeight: '220px'
   },
   headerRow: {
     display: 'flex',
@@ -91,7 +93,13 @@ const cardStyles = {
     color: '#111827',
     margin: 0,
     lineHeight: '1.3',
-    flex: 1
+    flex: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    minHeight: '52px'
   },
   topRatedTag: {
     backgroundColor: '#fef3c7',
@@ -102,20 +110,28 @@ const cardStyles = {
     borderRadius: '12px',
     textTransform: 'uppercase',
     letterSpacing: '0.5px',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    flexShrink: 0
   },
   metaInfo: {
     fontSize: '14px',
     color: '#6b7280',
     fontWeight: '400',
-    marginTop: '4px'
+    marginTop: '4px',
+    lineHeight: '1.4'
   },
   description: {
     fontSize: '15px',
     color: '#4b5563',
     lineHeight: '1.5',
     marginTop: '8px',
-    flex: 1
+    flex: 1,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    minHeight: '45px'
   },
   footerRow: {
     display: 'flex',
@@ -123,7 +139,8 @@ const cardStyles = {
     alignItems: 'center',
     marginTop: 'auto',
     paddingTop: '16px',
-    borderTop: '1px solid #f3f4f6'
+    borderTop: '1px solid #f3f4f6',
+    gap: '12px'
   },
   priceContainer: {
     display: 'flex',
@@ -153,7 +170,9 @@ const cardStyles = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    transition: 'background-color 0.2s ease-in-out'
+    transition: 'background-color 0.2s ease-in-out',
+    whiteSpace: 'nowrap',
+    flexShrink: 0
   },
   bookButtonHover: {
     backgroundColor: '#0056b3'
