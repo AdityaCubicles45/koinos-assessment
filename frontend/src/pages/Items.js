@@ -121,45 +121,37 @@ function Items() {
       clearTimeout(debounceTimerRef.current);
     }
 
-    debounceTimerRef.current = setTimeout(() => {
+    const loadItems = async () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
       abortControllerRef.current = new AbortController();
       let isMounted = true;
 
-      const loadItems = async () => {
-        try {
-          const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
-          if (isMounted && data) {
-            setItems(data.items || []);
-            setPagination({
-              total: data.total || 0,
-              totalPages: data.totalPages || 0,
-              items: data.items || []
-            });
-          }
-        } catch (err) {
-          if (err.name !== 'AbortError' && isMounted) {
-            console.error('Failed to fetch items:', err);
-            setPagination({
-              total: 0,
-              totalPages: 0,
-              items: []
-            });
-          }
+      try {
+        const data = await fetchItems({ page, limit: 50, q: searchQuery || undefined });
+        if (isMounted && data) {
+          setItems(data.items || []);
+          setPagination({
+            total: data.total || 0,
+            totalPages: data.totalPages || 0,
+            items: data.items || []
+          });
         }
-      };
-
-      loadItems();
-
-      return () => {
-        isMounted = false;
-        if (abortControllerRef.current) {
-          abortControllerRef.current.abort();
+      } catch (err) {
+        if (err.name !== 'AbortError' && isMounted) {
+          console.error('Failed to fetch items:', err);
+          setPagination({
+            total: 0,
+            totalPages: 0,
+            items: []
+          });
         }
-      };
-    }, searchQuery ? 300 : 0);
+      }
+    };
+
+    const delay = searchQuery ? 300 : 0;
+    debounceTimerRef.current = setTimeout(loadItems, delay);
 
     return () => {
       if (debounceTimerRef.current) {
