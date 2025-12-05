@@ -1,6 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 const itemsRouter = require('../items');
+const { errorHandler } = require('../../middleware/errorHandler');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -16,6 +17,7 @@ const originalData = [
 const app = express();
 app.use(express.json());
 app.use('/api/items', itemsRouter);
+app.use(errorHandler);
 
 beforeEach(async () => {
   await fs.writeFile(DATA_PATH, JSON.stringify(originalData, null, 2), 'utf8');
