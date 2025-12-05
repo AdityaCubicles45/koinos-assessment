@@ -1,6 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const getImageUrl = (itemName, category) => {
+  const searchTerm = itemName.toLowerCase().replace(/\s+/g, '+');
+  const categoryTerm = category ? category.toLowerCase() : '';
+  const keyword = searchTerm || categoryTerm || 'product';
+  return `https://source.unsplash.com/400x300/?${keyword}`;
+};
+
 const cardStyles = {
   card: {
     borderRadius: '12px',
@@ -13,14 +20,44 @@ const cardStyles = {
     display: 'flex',
     flexDirection: 'column',
     textDecoration: 'none',
-    color: 'inherit'
+    color: 'inherit',
+    overflow: 'hidden'
   },
   cardHover: {
     boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
     transform: 'translateY(-2px)'
   },
+  imageContainer: {
+    width: '100%',
+    height: '200px',
+    overflow: 'hidden',
+    backgroundColor: '#f3f4f6',
+    position: 'relative'
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transition: 'transform 0.3s ease-in-out'
+  },
+  imageLoading: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f3f4f6',
+    color: '#9ca3af',
+    fontSize: '14px'
+  },
+  imageError: {
+    backgroundColor: '#f3f4f6',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#9ca3af',
+    fontSize: '12px'
+  },
   header: {
-    padding: '20px 20px 12px'
+    padding: '16px 20px 12px'
   },
   title: {
     fontSize: '18px',
@@ -65,6 +102,9 @@ const cardStyles = {
 
 function ItemCard({ item }) {
   const [isHovered, setIsHovered] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+  const [imageError, setImageError] = React.useState(false);
+  const imageUrl = React.useMemo(() => getImageUrl(item.name, item.category), [item.name, item.category]);
 
   return (
     <Link
@@ -77,6 +117,32 @@ function ItemCard({ item }) {
       onMouseLeave={() => setIsHovered(false)}
       aria-label={`View details for ${item.name}`}
     >
+      <div style={cardStyles.imageContainer}>
+        {!imageLoaded && !imageError && (
+          <div style={cardStyles.imageLoading}>Loading image...</div>
+        )}
+        {imageError ? (
+          <div style={cardStyles.imageError}>
+            <span>No image available</span>
+          </div>
+        ) : (
+          <img
+            src={imageUrl}
+            alt={item.name}
+            style={{
+              ...cardStyles.image,
+              ...(isHovered ? { transform: 'scale(1.05)' } : {}),
+              display: imageLoaded ? 'block' : 'none'
+            }}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              setImageError(true);
+              setImageLoaded(false);
+            }}
+            loading="lazy"
+          />
+        )}
+      </div>
       <div style={cardStyles.header}>
         <h3 style={cardStyles.title}>{item.name}</h3>
         <div style={cardStyles.category}>{item.category || 'Uncategorized'}</div>
