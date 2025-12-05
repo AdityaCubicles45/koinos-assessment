@@ -114,6 +114,7 @@ function Items() {
   const [pagination, setPagination] = useState({ total: 0, totalPages: 0, items: [] });
   const [searchFocused, setSearchFocused] = useState(false);
   const abortControllerRef = useRef(null);
+  const debounceTimerRef = useRef(null);
 
   useEffect(() => {
     abortControllerRef.current = new AbortController();
@@ -142,12 +143,25 @@ function Items() {
       }
     };
 
-    loadItems();
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    if (searchQuery !== '') {
+      debounceTimerRef.current = setTimeout(() => {
+        loadItems();
+      }, 300);
+    } else {
+      loadItems();
+    }
 
     return () => {
       isMounted = false;
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
+      }
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
       }
     };
   }, [page, searchQuery, fetchItems, setItems]);

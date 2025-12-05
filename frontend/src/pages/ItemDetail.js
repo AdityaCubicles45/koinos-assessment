@@ -68,7 +68,7 @@ function ItemDetail() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/items/${id}`)
+    fetch(`http://localhost:3001/api/items/${id}`)
       .then(res => {
         if (!res.ok) throw new Error('Item not found');
         return res.json();
