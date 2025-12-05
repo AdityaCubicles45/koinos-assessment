@@ -11,16 +11,10 @@ const port = process.env.PORT || 3001;
 
 const allowedOrigins = process.env.FRONTEND_URL 
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
-  : ['http://localhost:3000', 'https://koinos-assessment.vercel.app'];
+  : ['http://localhost:3000', 'https://koinos-assessment.vercel.app', 'https://koinos-assessment.vercel.app/'];
 
 app.use(cors({ 
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
