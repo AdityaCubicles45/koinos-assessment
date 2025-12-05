@@ -1,8 +1,13 @@
-
 const notFound = (req, res, next) => {
   const err = new Error('Route Not Found');
   err.status = 404;
   next(err);
-}
+};
 
-module.exports = { notFound };
+const errorHandler = (err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(status).json({ message });
+};
+
+module.exports = { notFound, errorHandler };
