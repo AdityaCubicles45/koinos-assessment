@@ -6,6 +6,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 const DATA_PATH = path.join(__dirname, '../../../data/items.json');
+const DATA_DIR = path.dirname(DATA_PATH);
 const originalData = [
   { id: 1, name: 'Laptop Pro', category: 'Electronics', price: 2499 },
   { id: 2, name: 'Noise Cancelling Headphones', category: 'Electronics', price: 399 },
@@ -20,6 +21,11 @@ app.use('/api/items', itemsRouter);
 app.use(errorHandler);
 
 beforeEach(async () => {
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+  } catch (err) {
+    if (err.code !== 'EEXIST') throw err;
+  }
   await fs.writeFile(DATA_PATH, JSON.stringify(originalData, null, 2), 'utf8');
 });
 
